@@ -57,10 +57,10 @@
 
   * From *Tensorflow/models/research* `python object_detection/builders/model_builder_tf2_test.py`
   * NOTE: Running the above command, you may observe the error: *ImportError: cannot import name 'builder' from 'google.protobuf.internal'*
-    To solve this error, install the latest version of Protobuf: `pip install protobuf`
-    Copy `builder.py` from `.../Lib/site-packages/google/protobuf/internal` to a path of your choice
-    Install version of Protobuf compatible with your projects (e.g. `pip install protobuf==3.19.6` in our example)
-    Paste `builder.py` in `.../Lib/site-packages/google/protobuf/internal`
+    - To solve this error, install the latest version of Protobuf: `pip install protobuf`
+    - Copy `builder.py` from `.../Lib/site-packages/google/protobuf/internal` to a path of your choice
+    - Install version of Protobuf compatible with your projects (e.g. `pip install protobuf==3.19.6` in our example)
+    - Paste `builder.py` in `.../Lib/site-packages/google/protobuf/internal`
 
 ## Install Flask
   
