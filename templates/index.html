@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebNet Trainer</title>
+    <meta name="description" content="Neural nets trainer for object detection in art paintings">
+    <meta name="keywords" content="AI, artificial intelligence, training, object detection, art">
+    <meta name="viewport" content="width=device-width" initial-scale="1.0" maximum-scale="1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+<div class="header-container">
+    <header>
+        <h1><a href="#">WebNet Trainer</a></h1>
+    </header>
+</div>
+
+<div class="main-container">
+    <div class="informations">
+        <h3>Train your SSDMobileNet</h3>
+        <div>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut consequat arcu vitae convallis commodo.
+                Pellentesque ipsum tellus, ullamcorper non odio nec, malesuada laoreet lacus. In semper nibh et est
+                placerat, vel sagittis lacus pulvinar. Donec vel ipsum vitae magna dapibus rutrum. Donec quam ligula,
+                ultricies nec venenatis a, faucibus sed enim. Cras nec rhoncus nibh. Nunc vel iaculis metus. Aliquam
+                suscipit ultrices purus sed auctor. Suspendisse efficitur erat at fringilla finibus. Curabitur lobortis
+                pretium nulla et interdum. In ornare risus vel ornare semper.
+                In sit amet est nec lacus volutpat luctus id ut lectus. Phasellus quis blandit quam, id bibendum risus.
+            </p>
+        </div>
+    </div>
+    <div class="dynamic-container">
+        <div id="images-container">
+        
+        </div>
+        <div class="dataset-container">
+            <select id="dataset-select">
+            </select>
+            <button id="load-button" class="action-button">
+                Upload your dataset
+            </button>
+            <div id="upload-container">
+                <label for="dataset-name">Name</label>
+                <input id="dataset-name" type="text" placeholder="Name of your dataset">
+                <input id="input-dataset" type="file" name="files[]" accept="image/jpeg, image/png, image/jpg" multiple/>
+                <button id="submit-dataset" type="button" class="action-button">Upload</button>
+            </div>
+
+            <div id="concepts-container">
+                <div class="side-title"><h5>Concepts</h5></div>
+                <div id="concepts-list">
+                    <button id="select-all-concepts">Select all</button>
+                    <button id="deselect-all-concepts">Deselect all</button>
+                    <button id="add-label">+</button>
+                </div>
+                <button id="submit-concepts" class="action-button">Use these concepts</button>
+            </div>
+
+            <div id="inf-train-container">
+                <div>
+                    <div id="model-container">
+                        <div class="side-title"><h5>Model</h5></div>
+                        <div id="model-content">
+                            <label for="model-select">Select model that you want to use</label>
+                            <select id="model-select"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="inference-container">
+                    <div class="side-title"><h5>Annotation</h5></div>
+                    <div id="inference-content">
+                        <p>Click the button below to automatically annotate all images of this dataset,
+                            or revise concepts
+                        </p>
+                        <div id="inference-buttons-group">
+                            <button id="revise-concepts">Revise concepts</button>
+                            <button id="inference-button">Annotate</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="training-container">
+                    <div class="side-title"><h5>Training</h5></div>
+                    <div id="training-content">
+                        <p id="train-p">Click the button below to save all annotations of this dataset and start training
+                            SSDMobileNet
+                        </p>
+                        <button class="action-button" id="training-button">Start training</button>
+                        <button class="action-button" id="monitor-training-button">Monitor training</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pagination-container">
+        <div id="pagination">
+            <div id="previous-page">&laquo;</div>
+            <div id="next-page">&raquo;</div>
+        </div>
+    </div>
+</div>
+
+<div id="single-image-container">
+    <div id="exit-button">
+        <img src="{{ url_for('static', filename='icons/up-arrow-pngrepo-com.png') }}" style="transform: rotate(-90deg)" width="25px">
+    </div>
+    <div id="annotation-container">
+        <div class="input-group">
+            <label for="title">Title</label><input type="text" id="title" name="title">
+            <br>
+            <label for="author">Author</label><input type="text" id="author" name="author">
+            <br>
+            <label for="description">Description</label><textarea type="text" id="description" name="description" rows="4"></textarea>
+        </div>
+        <div id="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div id="ann-commands">
+            <div class="buttons-group">
+                <button id="inference-single-button" class="ann-button">Annotate</button>
+                <button id="reset-button" class="ann-button">Reset</button>
+            </div>
+            <button type="button" id="add-bbox" class="ann-button">+</button>
+            <div id="bboxes-container">
+                <img id="info" src="{{ url_for('static', filename='icons/info-circle-pngrepo-com.png') }}" alt="info"/>
+                <div id="bboxes-info">
+                    <div>
+                        <div><span style="background-color: rgba(178,80,6,0.6)"></span> Automatic</div>
+                        <div><span style="background-color: rgba(1, 86, 16, 0.6)"></span> Manual</div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons-group">
+                <button id="save-button" class="ann-button">Save annotations</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="training-page">
+    <div class="informations">
+        <h3>Training</h3>
+        <div>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut consequat arcu vitae convallis commodo.
+                Pellentesque ipsum tellus, ullamcorper non odio nec, malesuada laoreet lacus. In semper nibh et est
+                placerat, vel sagittis lacus pulvinar. Donec vel ipsum vitae magna dapibus rutrum.
+            </p>
+        </div>
+    </div>
+    <div id="training-wrapper">
+        <div id="back-button">
+            <img src="{{ url_for('static', filename='icons/up-arrow-pngrepo-com.png') }}" style="transform: rotate(-90deg)" width="25px">
+        </div>
+        <div id="training-selected-options">
+            <div class="training-options-group">
+                <h4 class="training-title">Dataset</h4>
+                <div id="selected-dataset"></div>
+            </div>
+            <div class="training-options-group">
+                <h4 class="training-title">Model</h4>
+                <div id="selected-model"></div>
+            </div>
+            <div class="training-options-group">
+                <button class="action-button" id="background-button">Continue in background</button>
+            </div>
+        </div>
+        <div id="progress-content">
+            <ul id="progress-list"></ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

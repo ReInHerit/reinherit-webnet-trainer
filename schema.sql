@@ -1,0 +1,50 @@
+DROP TABLE IF EXISTS imagesData;
+DROP TABLE IF EXISTS annotations;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS datasets;
+DROP TABLE IF EXISTS selectedCategories;
+DROP TABLE IF EXISTS models;
+
+CREATE TABLE datasets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE imagesData (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dataset_id INTEGER NOT NULL,
+    filename VARCHAR(255) UNIQUE NOT NULL,
+    width INTEGER NOT NULL,
+    height INTEGER NOT NULL,
+    title VARCHAR(255),
+    author VARCHAR(255),
+    description VARCHAR(255)
+);
+
+CREATE TABLE annotations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    image_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    area INTEGER NOT NULL,
+    x_min INTEGER NOT NULL,
+    y_min INTEGER NOT NULL,
+    width INTEGER NOT NULL,
+    height INTEGER NOT NULL,
+    automatic INTEGER NOT NULL
+);
+
+CREATE TABLE categories (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE selectedCategories (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE models (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    display_name VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) UNIQUE NOT NULL
+);
