@@ -12,7 +12,7 @@
 
 * `conda install pyqt=5`
 * `pip install labelImg`
-* test using `labelImg <path/to/images>`
+* Test using `labelImg <path/to/images>`
 
 ## Install TensorFlow
 
@@ -50,7 +50,7 @@
 
 **Install Object Detection API**
 
-  * From *Tensorflow/models/research* run `cp object_detection/packages/tf2/setup.py .` (NOTE: if you are on Windows this command will not work, run it from Git Bash shell)
+  * From *Tensorflow/models/research* run `cp object_detection/packages/tf2/setup.py .` (NOTE: if you are on Windows this command will not work, run it from a Git Bash shell)
   * From *Tensorflow/models/research* `python -m pip install --use-feature=2020-resolver .`
 
 **Test your installation**
