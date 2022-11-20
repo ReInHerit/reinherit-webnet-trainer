@@ -65,3 +65,8 @@
 * `pip install pillow`
 * `pip install labelImg`
 * Test using `labelImg <path/to/images>`
+
+## Install pretrained models
+
+* Check directories in `/pretrained_models` and download relative models from `https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md`
+* Extract such model files in the respective directory (`pipeline.config` file would be already there)
