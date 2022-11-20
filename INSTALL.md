@@ -8,12 +8,6 @@
 * Activate conda environment:
   `conda activate tensorflow`
 
-## Install image annotator
-
-* `conda install pyqt=5`
-* `pip install labelImg`
-* Test using `labelImg <path/to/images>`
-
 ## Install TensorFlow
 
 * Check TensorFlow Object Detection API Installation:
@@ -65,3 +59,9 @@
 ## Install Flask
   
   * `pip install Flask`
+
+## Install other dependencies
+
+* `pip install pillow`
+* `pip install labelImg`
+* Test using `labelImg <path/to/images>`
