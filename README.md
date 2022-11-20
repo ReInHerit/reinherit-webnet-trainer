@@ -13,7 +13,7 @@ Purposes:
 The system provides a web interface that allows to perform all operations described above.
 From the interface it is possible to create a new dataset from local images. Then the user can add metadata to images (such as title and author of the work of art) and simply draw bounding boxes on them.
 Furthermore, the system allows to run inference on images to draw bounding boxes automatically, using a network selected from Tensorflow models.
-![alt text](https://github.com/EleonoraRistori/SmartLens/blob/master/Suddivisione.png?raw=true)
+![alt text](https://github.com/thomasdelmoro21/webnet-trainer/blob/master/static/icons/screenshot19.png?raw=true)
 Since all dataset images are annotated, it is possible to start training of the selected model.
 
 ## Backend
