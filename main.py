@@ -358,9 +358,9 @@ def annotateSingleImage(file_path, selectedModel):
     connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
     modelName = cursor.execute("SELECT name FROM models WHERE display_name = ?", (selectedModel,)).fetchall()[0][0]
+    datasetId = cursor.execute("SELECT dataset_id FROM imagesData WHERE filename = ?", (file_path,)).fetchall()[0][0]
+    datasetName = cursor.execute("SELECT name FROM datasets WHERE id = ?", (datasetId,)).fetchall()[0][0]
     connection.close()
-
-    datasetName, _ = os.path.split(file_path)
     if os.path.isdir("models/fine_tuned_models/exported_inference_graph/" + datasetName + "/" + modelName):
         run_inference(file_path, datasetName, modelName, first=False)
     else:
