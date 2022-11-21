@@ -63,8 +63,9 @@
 ## Install other dependencies
 
 * `pip install pillow`
+* `pip install -U albumentations`
+* `pip install --upgrade typing_extensions`
 * `pip install labelImg`
-* Test using `labelImg <path/to/images>`
 
 ## Install pretrained models
 
