@@ -45,7 +45,7 @@ def main():
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-    folder = 'augmented_dataset'
+    folder = 'webnet_augmented_dataset'
     if os.path.isdir(folder):
         for filename in os.listdir(folder):
             file_path = os.path.join(folder, filename)

@@ -1,3 +1,5 @@
+import shutil
+
 from flask import Flask, render_template, url_for, request, jsonify, session, flash
 import sqlite3
 import os
@@ -243,16 +245,37 @@ def augmentImages(datasetName):
         json_path = "static/upload_images/" + datasetName + "/annotations.json"
 
     augmented_dir = "./webnet_augmented_dataset/" + datasetName
-    if not os.path.isdir(augmented_dir):
-        subprocess.call(["python", "augment_annotated_boxes.py", json_path, augmented_dir, "-n", "10"])
+    if os.path.isdir(augmented_dir):
+        for filename in os.listdir(augmented_dir):
+            file_path = os.path.join(augmented_dir, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+    subprocess.call(["python", "augment_annotated_boxes.py", json_path, augmented_dir, "-n", "10"])
 
 
 def splitDataset(datasetName):
     augmented_dir = "./webnet_augmented_dataset/" + datasetName
 
     splitted_dir = "./webnet_splitted_dataset/" + datasetName
-    if not os.path.isdir(splitted_dir):
-        subprocess.call(["python", "partition_dataset.py", "-i", augmented_dir, "-o", splitted_dir, "-j"])
+
+    if os.path.isdir(splitted_dir):
+        for filename in os.listdir(splitted_dir):
+            file_path = os.path.join(splitted_dir, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+    subprocess.call(["python", "partition_dataset.py", "-i", augmented_dir, "-o", splitted_dir, "-j"])
 
 
 def convertAnnotationFormat(datasetName):
@@ -296,18 +319,18 @@ def startTraining(datasetName, selectedModel):
         ["python", "configure_detector_training.py", "--model_name", modelName, "--dataset_name", datasetName,
          "--download_model", "-l", path_to_labels, "--train_record", train_record_path, "--test_record", test_record_path])
 
-    logdir = "./models/fine_tuned_models/training/" + datasetName
-    subprocess.Popen(["tensorboard", "--logdir", logdir, "--host", "0.0.0.0", "--port", "6006"], creationflags=subprocess.CREATE_NEW_CONSOLE)
+    logdir = "./models/fine_tuned_models/training/" + datasetName + "/" + modelName
+    subprocess.Popen(["tensorboard", "--logdir", logdir, "--host", "0.0.0.0", "--port", "6006"], shell=True)
 
     pipeline_config_path = "models/fine_tuned_models/training/" + datasetName + "/" + modelName + "/pipeline.config"
-    model_dir = "models/fine_tuned_models/training/" + datasetName
+    model_dir = "models/fine_tuned_models/training/" + datasetName + "/" + modelName
     model_main_path = path_to_tensorflow + "/models/research/object_detection/model_main_tf2.py"
     subprocess.call(
         ["python", model_main_path, "--pipeline_config_path", pipeline_config_path, "--model_dir",
          model_dir, "--alsologtostderr", "--num_train_steps", "30000", "--sample_1_of_n_eval_examples", "1"])
 
-    training_checkpoint_dir = "models/fine_tuned_models/training/" + datasetName
-    output_dir = "models/fine_tuned_models/exported_inference_graph/" + datasetName
+    training_checkpoint_dir = "models/fine_tuned_models/training/" + datasetName + "/" + modelName
+    output_dir = "models/fine_tuned_models/exported_inference_graph/" + datasetName + "/" + modelName
     exporter_main_path = path_to_tensorflow + "/models/research/object_detection/exporter_main_v2.py"
     subprocess.call(
         ["python", exporter_main_path, "--trained_checkpoint_dir", training_checkpoint_dir,
@@ -325,7 +348,7 @@ def annotateImages(datasetName, selectedModel):
     else:
         imagesDirectory = "static/upload_images/" + datasetName
 
-    if os.path.isdir("models/fine_tuned_models/exported_inference_graph/" + datasetName):
+    if os.path.isdir("models/fine_tuned_models/exported_inference_graph/" + datasetName + "/" + modelName):
         run_inference(imagesDirectory, datasetName, modelName, first=False)
     else:
         run_inference(imagesDirectory, datasetName, modelName)
@@ -338,7 +361,10 @@ def annotateSingleImage(file_path, selectedModel):
     connection.close()
 
     datasetName, _ = os.path.split(file_path)
-    run_inference(file_path, datasetName, modelName)
+    if os.path.isdir("models/fine_tuned_models/exported_inference_graph/" + datasetName + "/" + modelName):
+        run_inference(file_path, datasetName, modelName, first=False)
+    else:
+        run_inference(file_path, datasetName, modelName)
 
 
 PATH_TO_NEW_DATASET = "static/images/"

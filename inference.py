@@ -75,6 +75,7 @@ def annotate_directory(model, imagedir):
         store_annotations(image_path, coco_annotations)
     return True
 
+
 def annotate_image(model, image_path):
     output_dict, image_np = run_inference_for_single_image(model, image_path)
     coco_annotations = convert_tensor2list(output_dict, image_path)
@@ -93,12 +94,13 @@ def run_inference(input_path, datasetName, modelName, first=True):
         if os.path.isdir(model_dir):
             print(model_dir)
         model = tf.saved_model.load(model_dir)
-        #model = hub.load("https://tfhub.dev/tensorflow/ssd_mobilenet_v2/fpnlite_320x320/1")
+        # model = hub.load("https://tfhub.dev/tensorflow/ssd_mobilenet_v2/fpnlite_320x320/1")
         print('Model loaded.')
     else:
         print('Loading model...')
         tf.keras.backend.clear_session()
-        model = tf.saved_model.load("./models/fine_tuned_models/exported_inference_graph/" + datasetName + "/saved_model")
+        model = tf.saved_model.load(
+            "./models/fine_tuned_models/exported_inference_graph/" + datasetName + "/" + modelName + "/saved_model")
         print('Model loaded.')
 
     if os.path.isdir(input_path):
@@ -106,7 +108,6 @@ def run_inference(input_path, datasetName, modelName, first=True):
     else:
         result = annotate_image(model, input_path)
     return result
-
 
 
 def convert_tensor2list(output, img_filename):
@@ -148,9 +149,10 @@ def store_annotations(img_filename, annotations):
     cursor.execute("DELETE FROM annotations WHERE image_id = ? AND automatic = ?", (imageId, 1))
     for i in range(len(annotations)):
         area = annotations[i][1][2] * annotations[i][1][3]
-        cursor.execute("INSERT INTO annotations (image_id, category_id, area, x_min, y_min, width, height, automatic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                       (imageId, annotations[i][0], area, annotations[i][1][0], annotations[i][1][1], annotations[i][1][2], annotations[i][1][3], 1))
+        cursor.execute(
+            "INSERT INTO annotations (image_id, category_id, area, x_min, y_min, width, height, automatic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (imageId, annotations[i][0], area, annotations[i][1][0], annotations[i][1][1], annotations[i][1][2],
+             annotations[i][1][3], 1))
 
     connection.commit()
     connection.close()
-

@@ -152,7 +152,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $("#training-button").click(function () {
-
         startTraining();
         $(this).css("display", "none");
         $("#monitor-training-button").css("display", "block");
@@ -1461,11 +1460,6 @@ function startTraining() {
     var list = document.getElementById("progress-list");
     if (confirm(confirmText) === true) {
         $("#train-p").slideToggle();
-        var info = document.createElement("div");
-        info.setAttribute("class", "info-training")
-        info.innerHTML = "Training started...";
-        var container = document.getElementById("training-content");
-        container.append(info);
 
         var server_data = [
             {"dataset_name": datasetName},
@@ -1483,6 +1477,10 @@ function startTraining() {
             data: JSON.stringify(datasetName),
             contentType: "application/json",
             dataType: 'json',
+            error: function(errorThrown) {
+                alert("Saving annotations failed");
+                closeTraining();
+            },
             success: function(result) {
                 annotated.innerHTML = "Annotations saved correctly";
                 var augmented = document.createElement("li");
@@ -1496,6 +1494,10 @@ function startTraining() {
                     data: JSON.stringify(datasetName),
                     contentType: "application/json",
                     dataType: 'json',
+                    error: function(errorThrown) {
+                        alert("Augmentation failed");
+                        closeTraining();
+                    },
                     success: function(result) {
                         augmented.innerHTML = "Augmentation terminated";
                         var converted = document.createElement("li");
@@ -1509,6 +1511,10 @@ function startTraining() {
                             data: JSON.stringify(datasetName),
                             contentType: "application/json",
                             dataType: 'json',
+                            error: function(errorThrown) {
+                                alert("Converting annotations failed");
+                                closeTraining();
+                            },
                             success: function(result) {
                                 converted.innerHTML = "Boxes correctly coverted in tfRecords";
                                 var trained = document.createElement("li");
@@ -1530,8 +1536,13 @@ function startTraining() {
                                     data: JSON.stringify(server_data),
                                     contentType: "application/json",
                                     dataType: 'json',
+                                    error: function(errorThrown) {
+                                        alert("Training failed");
+                                        closeTraining();
+                                    },
                                     success: function(result) {
-                                        converted.innerHTML = "Training terminated";
+                                        alert("Training completed");
+                                        closeTraining();
                                     }
                                 })
                             }
@@ -1541,4 +1552,16 @@ function startTraining() {
             }
         })
     }
+}
+
+function closeTraining() {
+    var trainPage = document.getElementById("training-page");
+    var mainPage = document.querySelector(".main-container");
+    document.getElementById("progress-list").innerHTML = "";
+    $("#train-p").slideToggle();
+    $("#training-button").css("display", "block");
+    $("#monitor-training-button").css("display", "none");
+    console.log(trainPage.getAttribute("display"));
+    $(trainPage).css("display", "");
+    $(mainPage).css("display", "");
 }
