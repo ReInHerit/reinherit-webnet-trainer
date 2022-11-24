@@ -330,7 +330,7 @@ def startTraining(datasetName, selectedModel):
          model_dir, "--alsologtostderr", "--num_train_steps", "30000", "--sample_1_of_n_eval_examples", "1"])
 
     training_checkpoint_dir = "models/fine_tuned_models/training/" + datasetName + "/" + modelName
-    output_dir = "models/fine_tuned_models/exported_inference_graph/" + datasetName + "/" + modelName
+    output_dir = "models/fine_tuned_models/exported_inference_graph/" + modelName
     exporter_main_path = path_to_tensorflow + "/models/research/object_detection/exporter_main_v2.py"
     subprocess.call(
         ["python", exporter_main_path, "--trained_checkpoint_dir", training_checkpoint_dir,
@@ -348,7 +348,7 @@ def annotateImages(datasetName, selectedModel):
     else:
         imagesDirectory = "static/upload_images/" + datasetName
 
-    if os.path.isdir("models/fine_tuned_models/exported_inference_graph/" + datasetName + "/" + modelName):
+    if os.path.isdir("models/fine_tuned_models/exported_inference_graph/" + modelName):
         run_inference(imagesDirectory, datasetName, modelName, first=False)
     else:
         run_inference(imagesDirectory, datasetName, modelName)
@@ -361,7 +361,8 @@ def annotateSingleImage(file_path, selectedModel):
     datasetId = cursor.execute("SELECT dataset_id FROM imagesData WHERE filename = ?", (file_path,)).fetchall()[0][0]
     datasetName = cursor.execute("SELECT name FROM datasets WHERE id = ?", (datasetId,)).fetchall()[0][0]
     connection.close()
-    if os.path.isdir("models/fine_tuned_models/exported_inference_graph/" + datasetName + "/" + modelName):
+
+    if os.path.isdir("models/fine_tuned_models/exported_inference_graph/" + modelName):
         run_inference(file_path, datasetName, modelName, first=False)
     else:
         run_inference(file_path, datasetName, modelName)

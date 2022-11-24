@@ -94,13 +94,13 @@ def run_inference(input_path, datasetName, modelName, first=True):
         if os.path.isdir(model_dir):
             print(model_dir)
         model = tf.saved_model.load(model_dir)
-        # model = hub.load("https://tfhub.dev/tensorflow/ssd_mobilenet_v2/fpnlite_320x320/1")
         print('Model loaded.')
     else:
         print('Loading model...')
         tf.keras.backend.clear_session()
-        model = tf.saved_model.load(
-            "./models/fine_tuned_models/exported_inference_graph/" + datasetName + "/" + modelName + "/saved_model")
+        print("./models/fine_tuned_models/exported_inference_graph/" + modelName)
+        model = tf.saved_model.load("./models/fine_tuned_models/exported_inference_graph/" + modelName + "/saved_model")
+        #model = tf.saved_model.load("./models/pretrained_models/" + modelName + "/saved_model")
         print('Model loaded.')
 
     if os.path.isdir(input_path):
