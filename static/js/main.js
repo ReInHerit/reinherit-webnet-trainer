@@ -416,6 +416,7 @@ function displayBbox(boxData, resizeRatio) {
         box.innerHTML = this.value;
         var index = getBboxIndex(box);
         bboxes[index][0] = label.value;
+        buildResizers(box);
     });
 }
 
