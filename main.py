@@ -151,16 +151,6 @@ def storeImageAnnotations(data):
     connection.close()
 
 
-def verifyStore():
-    connection = sqlite3.connect('database.db')
-
-    cursor = connection.cursor()
-    result = cursor.execute("SELECT * FROM annotations WHERE image_id = ?", (7,)).fetchall()
-    print(result)
-    connection.close()
-    return result
-
-
 def get_image_data(filename):
     connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
@@ -374,9 +364,7 @@ PATH_TO_NEW_DATASET = "static/images/"
 @app.route('/')
 def index():
     conn = get_db_connection()
-    # posts = conn.execute('SELECT * FROM imagesData').fetchall()
     conn.close()
-    verifyStore()
     return render_template('index.html')
 
 
@@ -392,8 +380,6 @@ def add_label():
     if request.method == "POST":
         data = request.get_json()
         addCategory(data)
-        result = verifyStore()
-        print(result)
     results = {'processed': 'true'}
     return jsonify(results)
 
