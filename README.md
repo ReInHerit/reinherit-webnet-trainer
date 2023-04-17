@@ -1,5 +1,7 @@
 # WebNet Trainer
 
+This application is part of the **ReInHerit Toolkit**. It can be used to train the networks used in **Smart Lens** app.
+
 WebNet Trainer is a web annotation tool for object detection.
 It allows to annotate images with bounding boxes and train a neural network asynchronously using Tensorflow models.
 
@@ -13,7 +15,7 @@ Purposes:
 The system provides a web interface that allows to perform all operations described above.
 From the interface it is possible to create a new dataset from local images. Then the user can add metadata to images (such as title and author of the work of art) and simply draw bounding boxes on them.
 Furthermore, the system allows to run inference on images to draw bounding boxes automatically, using a network selected from Tensorflow models.
-![alt text](https://github.com/thomasdelmoro21/webnet-trainer/blob/master/static/icons/screenshot19.png?raw=true)
+![Interface example](static/icons/screenshot19.png)
 Since all dataset images are annotated, it is possible to start training of the selected model.
 
 ## Backend
@@ -53,3 +55,6 @@ This script allows to convert COCO annotations into tfRecords, that is the forma
 ### configure_detector_training.py
 
 This last script is used to configure the pipeline for the training. It uses the sample *.config* file and modify it with all necessary paths
+
+## Acknoweldgements
+Thomas Del Moro
